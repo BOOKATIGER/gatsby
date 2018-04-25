@@ -171,9 +171,8 @@ function prepareTextNode(node, key, text) {
 
 function prepareJSONNode(node, key, content) {
   const str = JSON.stringify(content)
-  const JSONNode = {
+  let JSONNode = {
     ...(_.isPlainObject(content) ? content : {}),
-    items: _.isArray(content) ? content : undefined,
     id: `${node.id}${key}JSONNode`,
     parent: node.id,
     children: [],
@@ -183,6 +182,10 @@ function prepareJSONNode(node, key, content) {
       content: str,
       contentDigest: digest(str),
     },
+  }
+  
+  if (_.isArray(content)) {
+    JSONNode.items = content
   }
 
   node.children = node.children.concat([JSONNode.id])
